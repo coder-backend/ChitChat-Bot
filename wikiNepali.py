@@ -147,14 +147,27 @@ def removeWords(text):
     txt_clean = " ".join(finalText)
     return txt_clean
 
-def wikiSearch(text):
-    txt_clean =removeWords(text)
+
+def wikiNepali(text):
+    translator = Translator()
+
     try:
-        wikipedia.set_lang("en")
-        search = wikipedia.search(txt_clean, results=1)
-        wikiResult =wikipedia.summary(str(search))
-        wikiResult =wikiResult.split(".")
-        wikiFinalResult = wikiResult[0]+". "+wikiResult[-2]
-        return wikiFinalResult,"en"
+        translated = translator.translate(text, src='ne', dest='en')
+        txt_clean = removeWords(translated.text)
+        try:
+            search = wikipedia.search(txt_clean, results=1)
+            wikipedia.set_lang("ne")
+            wikiResult =wikipedia.summary(str(search))
+            wikiResult =wikiResult.split("।")
+            wikiFinalResult = wikiResult[0]+"। "+wikiResult[-2]
+            return wikiFinalResult, "ne"
+        except:
+            wikipedia.set_lang("en")
+            search = wikipedia.search(txt_clean, results=1)
+            wikiResult =wikipedia.summary(str(search))
+            wikiResult =wikiResult.split(".")
+            wikiFinalResult = wikiResult[0]+". "+wikiResult[-2]
+            return wikiFinalResult, "en"
+
     except:
-        return "Sorry I can't find anything","en"
+        return "माफ गर्नुहोस्, मैले केहि पनि पाइ न","ne"
