@@ -12,7 +12,7 @@ from wiki import *
 import os
 
 from wikiNepali import *
-
+from mysqlDataFetch import *
 #############################English###############################################################
 pairs =[
         ["(hello|namaskar|namaste|hey|hi|hola)",["hey there","namaste","hi there"]],
@@ -69,33 +69,31 @@ def record_audio(userName):
             try:
                 text = r.recognize_google(audio)
                 print("You said:- " + text)
-                if(text=="next"):
-                    a=False
-                    quiting("hi",userName)
-            except sr.UnknownValueError:
-                print("BOT:- I didn't get that")
-                speak("I didn't get that","hi")
-                if(text=="next"):
-                    quiting("en",userName)
-                record_audio(userName)
-            if text!="next":
-                try:
-                    result = chat.respond(text)
-                    print("Bot: "+result)
-                    speak(result,"hi")
-                    if(text=="next"):
-                        quiting("hi",userName)
-                except:
+                if text!="next":
+                    try:
+                        #result = chat.respond(text)
+                        result = chatAnswer(text)
+                        print("Bot: "+result)
+                        speak(result,"hi")
+
+                    except:
+                        print("You got an error")
                         wikiResultSpeak,resultLang = wikiSearch(text)
                         print("BOT: "+wikiResultSpeak)
                         speak(wikiResultSpeak, resultLang)
                         if(text=="next"):
                             quiting("hi",userName)
                         record_audio(userName)
-                
-            else:
-                quiting("en",userName)
-                a=False
+                else:
+                    quiting("hi",userName)
+                    a=False
+            except sr.UnknownValueError:
+                print("BOT:- I didn't get that")
+                speak("I didn't get that","hi")
+                if(text=="next"):
+                    quiting("en",userName)
+                record_audio(userName)
+    return        
 ###################################End##################################################################
 
 #################################Nepali#################################################################
