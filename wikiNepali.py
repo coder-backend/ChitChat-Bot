@@ -1,6 +1,5 @@
 # print("what")
 import wikipedia
-from googletrans import Translator
 
 def removeWords(text):
     stopwords =['i','me','my','myself','we','our','ours','ourselves','you',"you're","you've","you'll","you'd",'your','yours','yourself','yourselves',
@@ -149,11 +148,9 @@ def removeWords(text):
 
 
 def wikiNepali(text):
-    translator = Translator()
 
     try:
-        translated = translator.translate(text, src='ne', dest='en')
-        txt_clean = removeWords(translated.text)
+        txt_clean = removeWords(text)
         try:
             search = wikipedia.search(txt_clean, results=1)
             wikipedia.set_lang("ne")
